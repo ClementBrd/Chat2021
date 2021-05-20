@@ -17,14 +17,18 @@
         android:ems="10"
         android:inputType="textMultiLine" />
 
-    <Button
+    <android.support.design.button.MaterialButton
         android:id="@+id/conversation_btnOK"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="#2196F3"
         android:enabled="true"
-        android:text="@string/ok" />
+        android:text="@string/ok"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+        android:textColor="#FFFFFF" />
 
     <ScrollView
         android:id="@+id/conversation_svMessages"
