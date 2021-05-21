@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,7 +21,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
     private static final String CAT = "LE4-SI";
     ScrollView conversation;
     LinearLayout conversationLayout;
-    EditText edtContenu;
+    TextInputLayout edtContenu;
     Button btnOK;
 
     APIInterface apiService;
@@ -71,7 +73,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        String contenu = edtContenu.getText().toString();
+        String contenu = edtContenu.getEditText().getText().toString();
         if(contenu.length() > 0){
             apiService = APIClient.getClient().create(APIInterface.class);
             Call<Message> call1 = apiService.doSetListMessage(hash, convID, contenu);
@@ -82,6 +84,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
                     message.setText(contenu);
                     conversationLayout.addView(message);
                     Log.i(CAT,response.body().toString());
+                    edtContenu.getEditText().getText().clear();
                 }
 
                 @Override

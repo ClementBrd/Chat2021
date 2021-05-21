@@ -27,4 +27,5 @@
 
     <string name="title_activity_choix_conv">ChoixConvActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="entrez_votre_message">Entrez votre message</string>
 </resources>
