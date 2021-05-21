@@ -52,7 +52,7 @@
 
     </com.google.android.material.button.MaterialButton>
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/conversation_svMessages"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -70,14 +70,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/conversation_titre">
 
-        <LinearLayout
-            android:id="@+id/conversation_svLayoutMessages"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-        </LinearLayout>
-    </ScrollView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
         android:id="@+id/conversation_titre"
