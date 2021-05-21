@@ -2,9 +2,11 @@
     <string name="app_name">Chat2021</string>
     <string name="action_settings">Préférences</string>
     <string name="action_account">Mon Compte</string>
-    <string name="titre">SI-Chat !</string>
+    <string name="titre">SI-CHAT</string>
     <string name="login">Login : </string>
+    <string name="pseudo">Entrez votre login</string>
     <string name="passe">Mot de passe : </string>
+    <string name="mdp">Entrez votre mot de passe</string>
     <string name="ok">OK</string>
     <string name="monCompte">Mon Compte</string>
     <string name="couleur">Couleur Préférée : </string>
