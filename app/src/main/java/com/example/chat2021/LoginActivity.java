@@ -6,7 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -74,7 +73,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 JSONObject obR = new JSONObject(result);
                 hash = obR.getString("hash");
-
 
                 String res = "{\"promo\":\"2020-2021\",\"enseignants\":[{\"prenom\":\"Mohamed\",\"nom\":\"Boukadir\"},{\"prenom\":\"Thomas\",\"nom\":\"Bourdeaud'huy\"}]}";
                 JSONObject ob = new JSONObject(res);

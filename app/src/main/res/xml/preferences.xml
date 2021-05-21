@@ -6,7 +6,7 @@
         android:summary="Indique si la sauvegarde des identifiants est active par défaut"
         android:title="Sauver Préférences" />
     <EditTextPreference
-        android:defaultValue="http://10.0.2.2/android_chat/data.php"
+        android:defaultValue="http://tomnab.fr/chat-api/"
         android:key="urlData"
         android:summary="Adresse de la page fournissant les données d'absence. Utiliser 10.0.2.2 pour désigner le serveur sur lequel tourne l'émulateur"
         android:title="URL du serveur" />
