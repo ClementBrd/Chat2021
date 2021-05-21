@@ -6,6 +6,13 @@ public class Message {
     String auteur;
     String couleur;
 
+    public Message(String id, String contenu, String auteur, String couleur){
+        this.id = id;
+        this.contenu = contenu;
+        this.auteur = auteur;
+        this.couleur = couleur;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
