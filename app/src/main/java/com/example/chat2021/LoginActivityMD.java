@@ -1,15 +1,14 @@
 package com.example.chat2021;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +35,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivityMD extends AppCompatActivity implements View.OnClickListener{
 
     SharedPreferences sp;
     EditText edtLogin;
@@ -52,7 +51,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Log.i(LoginActivity.this.CAT,"onPreExecute");
+            Log.i(LoginActivityMD.this.CAT,"onPreExecute");
         }
 
         @Override
@@ -61,11 +60,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // Lors de l'appel, on fournit les arguments à la suite, séparés par des virgules
             // On récupère ces arguments dans un tableau
             // pas d'interaction avec l'UI Thread ici
-            Log.i(LoginActivity.this.CAT,"doInBackground");
-            Log.i(LoginActivity.this.CAT,qs[0]);
-            Log.i(LoginActivity.this.CAT,qs[1]);
+            Log.i(LoginActivityMD.this.CAT,"doInBackground");
+            Log.i(LoginActivityMD.this.CAT,qs[0]);
+            Log.i(LoginActivityMD.this.CAT,qs[1]);
             String result = requete(qs[0], qs[1]);
-            Log.i(LoginActivity.this.CAT,result);
+            Log.i(LoginActivityMD.this.CAT,result);
             String hash = "";
             //String hash="4e28dafe87d65cca1482d21e76c61a06";
 
@@ -82,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 JSONArray profs = ob.getJSONArray("enseignants");
                 JSONObject tom = profs.getJSONObject(1);
                 String prenom = tom.getString("prenom");
-                Log.i(LoginActivity.this.CAT,"promo:" + promo + " prenom:" + prenom);
+                Log.i(LoginActivityMD.this.CAT,"promo:" + promo + " prenom:" + prenom);
 
                 Gson gson = new GsonBuilder()
                         .serializeNulls()
@@ -91,11 +90,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         .create();
 
                 String res2 = gson.toJson(ob);
-                Log.i(LoginActivity.this.CAT,"chaine recue:" + res);
-                Log.i(LoginActivity.this.CAT,"chaine avec gson:" + res2);
+                Log.i(LoginActivityMD.this.CAT,"chaine recue:" + res);
+                Log.i(LoginActivityMD.this.CAT,"chaine avec gson:" + res2);
 
                 Promo unePromo = gson.fromJson(res,Promo.class);
-                Log.i(LoginActivity.this.CAT,unePromo.toString());
+                Log.i(LoginActivityMD.this.CAT,unePromo.toString());
 
 
 
@@ -106,12 +105,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         protected void onPostExecute(String hash) {
-            Log.i(LoginActivity.this.CAT,"onPostExecute");
-            Log.i(LoginActivity.this.CAT,hash);
-            LoginActivity.this.alerter(hash);
+            Log.i(LoginActivityMD.this.CAT,"onPostExecute");
+            Log.i(LoginActivityMD.this.CAT,hash);
+            LoginActivityMD.this.alerter(hash);
 
 
-            Intent iVersChoixConv = new Intent(LoginActivity.this,ChoixConvActivity.class);
+            Intent iVersChoixConv = new Intent(LoginActivityMD.this,ChoixConvActivity.class);
             Bundle bdl = new Bundle();
             bdl.putString("hash",hash);
             iVersChoixConv.putExtras(bdl);
@@ -122,15 +121,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("");
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_m_d);
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sp.edit();
-        edtLogin = findViewById(R.id.login_edtLogin);
-        edtPasse = findViewById(R.id.login_edtPasse);
-        cbRemember = findViewById(R.id.login_cbRemember);
-        btnOK = findViewById(R.id.login_btnOK);
+        edtLogin = findViewById(R.id.choixConvMD);
+        edtPasse = findViewById(R.id.mdpMD);
+        cbRemember = findViewById(R.id.checkBoxMD);
+        btnOK = findViewById(R.id.buttonOKMD);
 
         btnOK.setOnClickListener(this);
     }
@@ -172,7 +169,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         // On envoie une requete HTTP
-        JSONAsyncTask jsonT = new JSONAsyncTask();
+        LoginActivityMD.JSONAsyncTask jsonT = new LoginActivityMD.JSONAsyncTask();
         jsonT.execute(sp.getString("urlData","http://tomnab.fr/chat-api/")+"authenticate",
                 "user=" + edtLogin.getText().toString()
                         + "&password=" + edtPasse.getText().toString());
@@ -299,6 +296,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
     }
-
-
+    
 }
