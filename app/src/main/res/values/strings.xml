@@ -8,6 +8,7 @@
     <string name="passe">Mot de passe : </string>
     <string name="mdp">Entrez votre mot de passe</string>
     <string name="ok">OK</string>
+    <string name="connexion">Connexion :</string>
     <string name="monCompte">Mon Compte</string>
     <string name="couleur">Couleur Préférée : </string>
     <string name="choixConversation">Choix Conversation</string>
