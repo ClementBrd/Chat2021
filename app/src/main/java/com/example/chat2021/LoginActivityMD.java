@@ -124,7 +124,7 @@ public class LoginActivityMD extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_login_m_d);
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sp.edit();
-        edtLogin = findViewById(R.id.loginMD);
+        edtLogin = findViewById(R.id.choixConvMD);
         edtPasse = findViewById(R.id.mdpMD);
         cbRemember = findViewById(R.id.checkBoxMD);
         btnOK = findViewById(R.id.buttonOKMD);
