@@ -75,7 +75,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
             call1.enqueue(new Callback<Message>() {
                 @Override
                 public void onResponse(Call<Message> call, Response<Message> response) {
-                    Message newMessage = new Message(Integer.toString(lm.messages.size() + 1), contenu, "Tom", "rouge");
+                    Message newMessage = new Message(Integer.toString(lm.messages.size() + 1), contenu, "Clémi", "rouge");
                     lm.messages.add(newMessage);
                     edtContenu.getEditText().getText().clear();
                     Log.i(CAT,response.body().toString());

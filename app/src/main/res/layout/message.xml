@@ -4,7 +4,18 @@
     android:id="@+id/conversation_svLayoutMessages"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     >
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/conversation_textViewAuteur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/blanc"
+        android:textColor="@color/mainColor"
+        android:textStyle="bold">
+
+    </com.google.android.material.textview.MaterialTextView>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/conversation_textViewMessage"

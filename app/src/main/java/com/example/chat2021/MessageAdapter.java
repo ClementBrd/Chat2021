@@ -22,6 +22,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
+        public TextView auteurTextView;
         public TextView contenuTextView;
 
         // We also create a constructor that accepts the entire item row
@@ -31,6 +32,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             // to access the context from any ViewHolder instance.
             super(itemView);
 
+            auteurTextView = (TextView) itemView.findViewById(R.id.conversation_textViewAuteur);
             contenuTextView = (TextView) itemView.findViewById(R.id.conversation_textViewMessage);
         }
     }
@@ -57,8 +59,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         Message message = listeMessages.get(position);
 
         // Set item views based on your views and data model
-        TextView textView = holder.contenuTextView;
-        textView.setText(message.contenu);
+        TextView auteurTextView = holder.auteurTextView;
+        TextView contenuTextView = holder.contenuTextView;
+        auteurTextView.setText(message.auteur);
+        contenuTextView.setText(message.contenu);
     }
 
     @Override
