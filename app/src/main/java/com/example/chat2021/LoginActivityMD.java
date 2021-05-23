@@ -107,14 +107,17 @@ public class LoginActivityMD extends AppCompatActivity implements View.OnClickLi
         protected void onPostExecute(String hash) {
             Log.i(LoginActivityMD.this.CAT,"onPostExecute");
             Log.i(LoginActivityMD.this.CAT,hash);
-            LoginActivityMD.this.alerter(hash);
 
-
-            Intent iVersChoixConv = new Intent(LoginActivityMD.this,ChoixConvActivity.class);
-            Bundle bdl = new Bundle();
-            bdl.putString("hash",hash);
-            iVersChoixConv.putExtras(bdl);
-            startActivity(iVersChoixConv);
+            if(!hash.isEmpty()) {
+                LoginActivityMD.this.alerter(hash);
+                Intent iVersChoixConv = new Intent(LoginActivityMD.this,ChoixConvActivity.class);
+                Bundle bdl = new Bundle();
+                bdl.putString("hash",hash);
+                iVersChoixConv.putExtras(bdl);
+                startActivity(iVersChoixConv);
+            } else {
+                LoginActivityMD.this.alerter("Erreur indentifiants incorrect");
+            }
         }
     }
 
