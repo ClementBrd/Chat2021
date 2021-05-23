@@ -110,7 +110,7 @@ public class LoginActivityMD extends AppCompatActivity implements View.OnClickLi
             LoginActivityMD.this.alerter(hash);
 
 
-            Intent iVersChoixConv = new Intent(LoginActivityMD.this,ChoixConvActivity.class);
+            Intent iVersChoixConv = new Intent(LoginActivityMD.this,ChoixConvActivityMD.class);
             Bundle bdl = new Bundle();
             bdl.putString("hash",hash);
             iVersChoixConv.putExtras(bdl);
