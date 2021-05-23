@@ -1,6 +1,10 @@
 package com.example.chat2021;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationBarItemView;
+import com.google.android.material.navigation.NavigationBarMenu;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,9 +27,8 @@ import retrofit2.Response;
 public class ConvActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String CAT = "LE4-SI";
-    ScrollView conversation;
-    LinearLayout conversationLayout;
-    EditText edtContenu;
+    RecyclerView conversation;
+    TextInputLayout edtContenu;
     Button btnOK;
 
     APIInterface apiService;
@@ -31,8 +40,10 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_conversation);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         conversation = findViewById(R.id.conversation_svMessages);
-        conversationLayout = findViewById(R.id.conversation_svLayoutMessages);
         edtContenu = findViewById(R.id.conversation_edtMessage);
         btnOK = findViewById(R.id.conversation_btnOK);
 
@@ -48,18 +59,10 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<ListMessage> call, Response<ListMessage> response) {
                 lm = response.body();
-                for(Message m : lm.messages) {
-                    TextView message = new TextView(ConvActivity.this);
-                    message.setText(m.contenu);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT
-                    );
-                    message.setLayoutParams(params);
-                    conversationLayout.addView(message);
-                }
-
-                Log.i(CAT,lm.toString());
+                MessageAdapter adapter = new MessageAdapter(lm.messages);
+                conversation.setAdapter(adapter);
+                conversation.setLayoutManager(new LinearLayoutManager(ConvActivity.this));
+                Log.i(CAT,lm.messages.toString());
             }
 
             @Override
@@ -71,16 +74,16 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        String contenu = edtContenu.getText().toString();
+        String contenu = edtContenu.getEditText().getText().toString();
         if(contenu.length() > 0){
             apiService = APIClient.getClient().create(APIInterface.class);
             Call<Message> call1 = apiService.doSetListMessage(hash, convID, contenu);
             call1.enqueue(new Callback<Message>() {
                 @Override
                 public void onResponse(Call<Message> call, Response<Message> response) {
-                    TextView message = new TextView(ConvActivity.this);
-                    message.setText(contenu);
-                    conversationLayout.addView(message);
+                    Message newMessage = new Message(Integer.toString(lm.messages.size() + 1), contenu, "Clémi", "rouge");
+                    lm.messages.add(newMessage);
+                    edtContenu.getEditText().getText().clear();
                     Log.i(CAT,response.body().toString());
                 }
 
