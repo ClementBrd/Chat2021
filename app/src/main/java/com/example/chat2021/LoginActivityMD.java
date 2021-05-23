@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -18,6 +19,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -38,6 +40,8 @@ import java.net.URL;
 public class LoginActivityMD extends AppCompatActivity implements View.OnClickListener{
 
     SharedPreferences sp;
+    TextInputLayout inputLogin;
+    TextInputLayout inputPasse;
     EditText edtLogin;
     EditText edtPasse;
     CheckBox cbRemember;
@@ -109,6 +113,8 @@ public class LoginActivityMD extends AppCompatActivity implements View.OnClickLi
             Log.i(LoginActivityMD.this.CAT,hash);
 
             if(!hash.isEmpty()) {
+                inputLogin.setErrorEnabled(false);
+                inputPasse.setErrorEnabled(false);
                 LoginActivityMD.this.alerter(hash);
                 Intent iVersChoixConv = new Intent(LoginActivityMD.this,ChoixConvActivity.class);
                 Bundle bdl = new Bundle();
@@ -116,7 +122,9 @@ public class LoginActivityMD extends AppCompatActivity implements View.OnClickLi
                 iVersChoixConv.putExtras(bdl);
                 startActivity(iVersChoixConv);
             } else {
-                LoginActivityMD.this.alerter("Erreur indentifiants incorrect");
+                inputLogin.setError("Erreur login ou mot de passe incorrect");
+                inputPasse.setError("Erreur login ou mot de passe incorrect");
+                LoginActivityMD.this.alerter("Erreur login ou mot de passe incorrect");
             }
         }
     }
@@ -127,6 +135,8 @@ public class LoginActivityMD extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_login_m_d);
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sp.edit();
+        inputLogin = findViewById(R.id.textInputLayout);
+        inputPasse = findViewById(R.id.textInputLayout2);
         edtLogin = findViewById(R.id.choixConvMD);
         edtPasse = findViewById(R.id.mdpMD);
         cbRemember = findViewById(R.id.checkBoxMD);
