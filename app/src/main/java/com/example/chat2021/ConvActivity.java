@@ -1,5 +1,6 @@
 package com.example.chat2021;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationBarItemView;
+import com.google.android.material.navigation.NavigationBarMenu;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -37,6 +40,9 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_conversation);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         conversation = findViewById(R.id.conversation_svMessages);
         edtContenu = findViewById(R.id.conversation_edtMessage);
         btnOK = findViewById(R.id.conversation_btnOK);
