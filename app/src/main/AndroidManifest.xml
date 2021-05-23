@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chat2021"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LoginActivityMD" >
+        <activity android:name=".ChoixConvActivityMD"/>
+        <activity android:name=".LoginActivityMD">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,6 +25,7 @@
         <activity android:name=".ChoixConvActivity" />
         <activity android:name=".PrefActivity" />
         <activity android:name=".LoginActivity"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

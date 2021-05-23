@@ -126,6 +126,7 @@ public class LoginActivityMD extends AppCompatActivity implements View.OnClickLi
                 inputPasse.setError("Erreur login ou mot de passe incorrect");
                 LoginActivityMD.this.alerter("Erreur login ou mot de passe incorrect");
             }
+
         }
     }
 
