@@ -82,20 +82,30 @@ public class ConvActivity extends AppCompatActivity {
         if(contenu.length() > 0) {
             apiService = APIClient.getClient().create(APIInterface.class);
             Call<Message> call1 = apiService.doSetListMessage(hash, convID, contenu);
-            call1.enqueue(new Callback<Message>() {
-                @Override
-                public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
-                    Message newMessage = new Message(Integer.toString(lm.messages.size() + 1), contenu, "Clémi", "rouge");
-                    lm.messages.add(newMessage);
-                    conversation_edtMessage.getEditText().getText().clear();
-                    Log.i(CAT,response.body().toString());
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
-                    call.cancel();
-                }
-            });
+            doInBackground(call1, contenu);
         }
+    }
+
+    @Background
+    void doInBackground(Call<Message> call1, String contenu) {
+        call1.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
+                Message newMessage = new Message(Integer.toString(lm.messages.size() + 1), contenu, "tom", "rouge");
+                onPostExecute(newMessage);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
+                call.cancel();
+            }
+        });
+    }
+
+    @UiThread
+    void onPostExecute(Message newMessage) {
+        lm.messages.add(newMessage);
+        conversation_edtMessage.getEditText().getText().clear();
+        Log.i(CAT,newMessage.toString());
     }
 }

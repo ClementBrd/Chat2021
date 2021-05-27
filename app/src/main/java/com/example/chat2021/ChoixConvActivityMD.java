@@ -1,5 +1,6 @@
 package com.example.chat2021;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -51,6 +52,11 @@ public class ChoixConvActivityMD extends AppCompatActivity {
 
         apiService = APIClient.getClient().create(APIInterface.class);
         Call<ListConversation> call1 = apiService.doGetListConversation(hash);
+        doInBackground(call1);
+    }
+
+    @Background
+    void doInBackground(Call<ListConversation> call1) {
         call1.enqueue(new Callback<ListConversation>() {
             @Override
             public void onResponse(@NotNull Call<ListConversation> call, @NotNull Response<ListConversation> response) {
@@ -67,17 +73,7 @@ public class ChoixConvActivityMD extends AppCompatActivity {
                         spinnerArray
                 );
 
-                dropdownText.setAdapter(adapter);
-                dropdownText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1,
-                                            int arg2, long arg3) {
-                        alerter("ID ITEM SELECTED " + Integer.toString(idArray.get(arg2 + 1)));
-                        idItemSelected = idArray.get(arg2);
-                    }
-                });
-                Log.i(CAT,lc.toString());
+                onPostExecute(adapter, idArray);
             }
 
             @Override
@@ -85,6 +81,20 @@ public class ChoixConvActivityMD extends AppCompatActivity {
                 call.cancel();
             }
         });
+    }
+
+    @UiThread
+    void onPostExecute(ArrayAdapter<String> adapter, List<Integer> idArray) {
+        dropdownText.setAdapter(adapter);
+        dropdownText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1,
+                                    int arg2, long arg3) {
+                alerter("ID ITEM SELECTED " + Integer.toString(idArray.get(arg2 + 1)));
+                idItemSelected = idArray.get(arg2);
+            }
+        });
+        Log.i(CAT,lc.toString());
     }
 
     @Click
@@ -96,7 +106,6 @@ public class ChoixConvActivityMD extends AppCompatActivity {
         }else{
             Intent change2Conv = new Intent(this,ConvActivity_.class);
             Bundle bdl = new Bundle();
-            // Conversation conv = (Conversation) listeConv.getSelectedItem();
             bdl.putString("conv", Integer.toString(idItemSelected));
             bdl.putString("hash", hash);
             change2Conv.putExtras(bdl);
