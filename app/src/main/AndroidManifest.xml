@@ -21,7 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ConvActivity" />
+        <activity android:name=".ConvActivity_" />
         <activity android:name=".ChoixConvActivity" />
         <activity android:name=".PrefActivity" />
         <activity android:name=".LoginActivity" />

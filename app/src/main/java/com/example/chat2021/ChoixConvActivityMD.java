@@ -94,7 +94,7 @@ public class ChoixConvActivityMD extends AppCompatActivity {
             dropdownText.setError("Veuillez sélectionner une conversation",null);
             alerter("Veuillez sélectionner une conversation");
         }else{
-            Intent change2Conv = new Intent(this,ConvActivity.class);
+            Intent change2Conv = new Intent(this,ConvActivity_.class);
             Bundle bdl = new Bundle();
             // Conversation conv = (Conversation) listeConv.getSelectedItem();
             bdl.putString("conv", Integer.toString(idItemSelected));
