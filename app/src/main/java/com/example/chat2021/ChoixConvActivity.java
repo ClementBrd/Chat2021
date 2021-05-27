@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.androidannotations.annotations.EActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 

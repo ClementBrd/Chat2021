@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chat2021"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ChoixConvActivityMD"/>
+        <activity android:name=".ChoixConvActivityMD_"/>
         <activity android:name=".LoginActivityMD_">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

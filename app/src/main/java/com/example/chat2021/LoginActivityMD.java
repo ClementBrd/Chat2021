@@ -155,8 +155,7 @@ public class LoginActivityMD extends AppCompatActivity {
         if(!hash.isEmpty()) {
             textInputLayoutLogin.setErrorEnabled(false);
             textInputLayoutPasse.setErrorEnabled(false);
-            // alerter(hash);
-            Intent iVersChoixConv = new Intent(this,ChoixConvActivityMD.class);
+            Intent iVersChoixConv = new Intent(this,ChoixConvActivityMD_.class);
             Bundle bdl = new Bundle();
             bdl.putString("hash",hash);
             iVersChoixConv.putExtras(bdl);
@@ -164,7 +163,6 @@ public class LoginActivityMD extends AppCompatActivity {
         } else {
             textInputLayoutLogin.setError("Erreur login ou mot de passe incorrect");
             textInputLayoutPasse.setError("Erreur login ou mot de passe incorrect");
-            // alerter("Erreur login ou mot de passe incorrect");
         }
     }
 

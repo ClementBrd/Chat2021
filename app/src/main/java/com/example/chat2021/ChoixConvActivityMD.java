@@ -16,6 +16,12 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -25,38 +31,26 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChoixConvActivityMD extends AppCompatActivity implements View.OnClickListener {
-
-    private TextInputLayout textInputLayout;
-    private AutoCompleteTextView dropdownText;
+@EActivity(R.layout.activity_choix_conv_m_d)
+public class ChoixConvActivityMD extends AppCompatActivity {
 
     private static final String CAT = "LE4-SI";
     APIInterface apiService;
     String hash;
-    Spinner listeConv;
     ListConversation lc;
-    Button btnOK;
     int idItemSelected = Integer.MAX_VALUE;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choix_conv_m_d);
+    @ViewById(R.id.dropdown_text)
+    AutoCompleteTextView dropdownText;
 
-        textInputLayout = findViewById(R.id.choixConvMD);
-        dropdownText = findViewById(R.id.dropdown_text);
-
+    @AfterViews
+    void initialize() {
         Bundle bdl = this.getIntent().getExtras();
         Log.i(CAT,bdl.getString("hash"));
         hash = bdl.getString("hash");
-        btnOK = findViewById(R.id.buttonChoixOKMD);
-        btnOK.setOnClickListener(this);
 
         apiService = APIClient.getClient().create(APIInterface.class);
         Call<ListConversation> call1 = apiService.doGetListConversation(hash);
-
-        String[] items = new String[]{};
-
         call1.enqueue(new Callback<ListConversation>() {
             @Override
             public void onResponse(@NotNull Call<ListConversation> call, @NotNull Response<ListConversation> response) {
@@ -74,18 +68,15 @@ public class ChoixConvActivityMD extends AppCompatActivity implements View.OnCli
                 );
 
                 dropdownText.setAdapter(adapter);
-
                 dropdownText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(AdapterView<?> arg0, View arg1,
-                                               int arg2, long arg3) {
+                                            int arg2, long arg3) {
                         alerter("ID ITEM SELECTED " + Integer.toString(idArray.get(arg2 + 1)));
                         idItemSelected = idArray.get(arg2);
                     }
-
                 });
-
                 Log.i(CAT,lc.toString());
             }
 
@@ -94,25 +85,14 @@ public class ChoixConvActivityMD extends AppCompatActivity implements View.OnCli
                 call.cancel();
             }
         });
-
-
-
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onClick(View v) {
+    @Click
+    void buttonChoixOKMD() {
         alerter("Click sur OK Conv");
-
         if(idItemSelected == Integer.MAX_VALUE){
-
             dropdownText.setError("Veuillez sélectionner une conversation",null);
             alerter("Veuillez sélectionner une conversation");
-
         }else{
             Intent change2Conv = new Intent(this,ConvActivity.class);
             Bundle bdl = new Bundle();
@@ -122,8 +102,6 @@ public class ChoixConvActivityMD extends AppCompatActivity implements View.OnCli
             change2Conv.putExtras(bdl);
             startActivity(change2Conv);
         }
-
-
     }
 
     private void alerter(String s) {
@@ -131,5 +109,4 @@ public class ChoixConvActivityMD extends AppCompatActivity implements View.OnCli
         Toast t = Toast.makeText(this,s,Toast.LENGTH_SHORT);
         t.show();
     }
-
 }
