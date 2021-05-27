@@ -56,8 +56,8 @@ public class ChoixConvActivityMD extends AppCompatActivity {
             @Override
             public void onResponse(@NotNull Call<ListConversation> call, @NotNull Response<ListConversation> response) {
                 lc = response.body();
-                List<String> spinnerArray =  new ArrayList<String>();
-                List<Integer> idArray = new ArrayList<Integer>();
+                List<String> spinnerArray =  new ArrayList<>();
+                List<Integer> idArray = new ArrayList<>();
                 for(Conversation c : lc.conversations) {
                     spinnerArray.add(c.theme);
                     idArray.add(Integer.parseInt(c.id));

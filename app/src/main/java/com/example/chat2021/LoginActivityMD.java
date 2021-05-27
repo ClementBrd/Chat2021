@@ -201,7 +201,7 @@ public class LoginActivityMD extends AppCompatActivity {
         NetworkInfo netInfo = cnMngr.getActiveNetworkInfo();
 
         String sType = "Aucun réseau détecté";
-        Boolean bStatut = false;
+        boolean bStatut = false;
         if (netInfo != null)
         {
 
@@ -252,8 +252,6 @@ public class LoginActivityMD extends AppCompatActivity {
                 String txtReponse = convertStreamToString(in);
                 urlConnection.disconnect();
                 return txtReponse;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -269,7 +267,7 @@ public class LoginActivityMD extends AppCompatActivity {
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
+                sb.append(line).append("\n");
             }
             return sb.toString();
         }finally {

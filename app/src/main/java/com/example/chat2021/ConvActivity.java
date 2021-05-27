@@ -66,11 +66,13 @@ public class ConvActivity extends AppCompatActivity {
 
     @Click
     void conversation_btnOK() {
-        String contenu = conversation_edtMessage.getEditText().getText().toString();
-        if(contenu.length() > 0) {
-            apiService = APIClient.getClient().create(APIInterface.class);
-            Call<Message> call1 = apiService.doSetListMessage(hash, convID, contenu);
-            doInBackground(call1, contenu);
+        if(conversation_edtMessage.getEditText() != null) {
+            String contenu = conversation_edtMessage.getEditText().getText().toString();
+            if(contenu.length() > 0) {
+                apiService = APIClient.getClient().create(APIInterface.class);
+                Call<Message> call1 = apiService.doSetListMessage(hash, convID, contenu);
+                doInBackground(call1, contenu);
+            }
         }
     }
 
@@ -93,7 +95,8 @@ public class ConvActivity extends AppCompatActivity {
     @UiThread
     void onPostExecute(Message newMessage) {
         lm.messages.add(newMessage);
-        conversation_edtMessage.getEditText().getText().clear();
+        if(conversation_edtMessage.getEditText() != null)
+            conversation_edtMessage.getEditText().getText().clear();
         Log.i(CAT,newMessage.toString());
     }
 }
