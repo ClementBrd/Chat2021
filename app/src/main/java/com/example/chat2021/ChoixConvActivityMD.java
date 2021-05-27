@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +59,7 @@ public class ChoixConvActivityMD extends AppCompatActivity implements View.OnCli
 
         call1.enqueue(new Callback<ListConversation>() {
             @Override
-            public void onResponse(Call<ListConversation> call, Response<ListConversation> response) {
+            public void onResponse(@NotNull Call<ListConversation> call, @NotNull Response<ListConversation> response) {
                 lc = response.body();
                 List<String> spinnerArray =  new ArrayList<String>();
                 List<Integer> idArray = new ArrayList<Integer>();
@@ -88,7 +90,7 @@ public class ChoixConvActivityMD extends AppCompatActivity implements View.OnCli
             }
 
             @Override
-            public void onFailure(Call<ListConversation> call, Throwable t) {
+            public void onFailure(@NotNull Call<ListConversation> call, @NotNull Throwable t) {
                 call.cancel();
             }
         });

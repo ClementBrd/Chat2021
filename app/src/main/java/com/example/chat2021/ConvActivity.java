@@ -1,5 +1,6 @@
 package com.example.chat2021;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import com.google.android.material.navigation.NavigationBarItemView;
 import com.google.android.material.navigation.NavigationBarMenu;
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.androidannotations.annotations.EActivity;
 
 import java.util.ArrayList;
 
@@ -57,7 +60,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         Call<ListMessage> call1 = apiService.doGetListMessage(hash, convID);
         call1.enqueue(new Callback<ListMessage>() {
             @Override
-            public void onResponse(Call<ListMessage> call, Response<ListMessage> response) {
+            public void onResponse(@NonNull Call<ListMessage> call, @NonNull Response<ListMessage> response) {
                 lm = response.body();
                 MessageAdapter adapter = new MessageAdapter(lm.messages);
                 conversation.setAdapter(adapter);
@@ -66,7 +69,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(Call<ListMessage> call, Throwable t) {
+            public void onFailure(@NonNull Call<ListMessage> call, @NonNull Throwable t) {
                 call.cancel();
             }
         });
@@ -80,7 +83,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
             Call<Message> call1 = apiService.doSetListMessage(hash, convID, contenu);
             call1.enqueue(new Callback<Message>() {
                 @Override
-                public void onResponse(Call<Message> call, Response<Message> response) {
+                public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                     Message newMessage = new Message(Integer.toString(lm.messages.size() + 1), contenu, "Clémi", "rouge");
                     lm.messages.add(newMessage);
                     edtContenu.getEditText().getText().clear();
@@ -88,7 +91,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 @Override
-                public void onFailure(Call<Message> call, Throwable t) {
+                public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                     call.cancel();
                 }
             });
