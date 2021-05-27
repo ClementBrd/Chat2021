@@ -7,7 +7,7 @@
     tools:context=".LoginActivityMD">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/textInputLayoutLogin"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,14 +29,14 @@
 
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/choixConvMD"
+            android:id="@+id/edtLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
+        android:id="@+id/textInputLayoutPasse"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
 
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/mdpMD"
+            android:id="@+id/edtPasse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
@@ -93,7 +93,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/remember"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPasse" />
 
     <CheckBox
         android:id="@+id/checkBoxMD"
@@ -102,14 +102,14 @@
         android:layout_marginTop="2dp"
         app:useMaterialThemeColors="true"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPasse" />
 
     <Button
         android:id="@+id/buttonOKMD"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ok"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayoutPasse"
         app:layout_constraintTop_toBottomOf="@+id/checkBoxMD"/>
 
     <TextView
@@ -118,18 +118,19 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:text="@string/connexion"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout" />
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayoutLogin"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayoutLogin" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="163dp"
         android:layout_height="174dp"
         android:layout_marginBottom="68dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayoutLogin"
         app:layout_constraintEnd_toStartOf="@+id/view3"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toEndOf="@+id/view3"
-        app:srcCompat="@mipmap/wave_icon_foreground" />
+        app:srcCompat="@mipmap/wave_icon_foreground"
+        android:contentDescription="@string/logowave" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

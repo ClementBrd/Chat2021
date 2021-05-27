@@ -4,17 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,6 +19,12 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,160 +39,128 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class LoginActivityMD extends AppCompatActivity implements View.OnClickListener{
+@EActivity(R.layout.activity_login_m_d)
+public class LoginActivityMD extends AppCompatActivity {
 
-    SharedPreferences sp;
-    TextInputLayout inputLogin;
-    TextInputLayout inputPasse;
-    EditText edtLogin;
-    EditText edtPasse;
-    CheckBox cbRemember;
-    Button btnOK;
-    SharedPreferences.Editor editor;
     private final String CAT = "LE4-SI";
 
-    class JSONAsyncTask extends AsyncTask<String, Void, String> {
-        // Params, Progress, Result
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Log.i(LoginActivityMD.this.CAT,"onPreExecute");
-        }
+    @ViewById(R.id.textInputLayoutLogin)
+    TextInputLayout textInputLayoutLogin;
 
-        @Override
-        protected String doInBackground(String... qs) {
-            // String... : ellipse
-            // Lors de l'appel, on fournit les arguments à la suite, séparés par des virgules
-            // On récupère ces arguments dans un tableau
-            // pas d'interaction avec l'UI Thread ici
-            Log.i(LoginActivityMD.this.CAT,"doInBackground");
-            Log.i(LoginActivityMD.this.CAT,qs[0]);
-            Log.i(LoginActivityMD.this.CAT,qs[1]);
-            String result = requete(qs[0], qs[1]);
-            Log.i(LoginActivityMD.this.CAT,result);
-            String hash = "";
-            //String hash="4e28dafe87d65cca1482d21e76c61a06";
+    @ViewById(R.id.textInputLayoutPasse)
+    TextInputLayout textInputLayoutPasse;
 
-            // TODO : ne traite pas les erreurs de connexion !
+    @ViewById(R.id.edtLogin)
+    EditText edtLogin;
 
-            try {
+    @ViewById(R.id.edtPasse)
+    EditText edtPasse;
+    
+    @ViewById(R.id.checkBoxMD)
+    CheckBox checkBoxMD;
 
-                JSONObject obR = new JSONObject(result);
-                hash = obR.getString("hash");
-
-                String res = "{\"promo\":\"2020-2021\",\"enseignants\":[{\"prenom\":\"Mohamed\",\"nom\":\"Boukadir\"},{\"prenom\":\"Thomas\",\"nom\":\"Bourdeaud'huy\"}]}";
-                JSONObject ob = new JSONObject(res);
-                String promo = ob.getString("promo");
-                JSONArray profs = ob.getJSONArray("enseignants");
-                JSONObject tom = profs.getJSONObject(1);
-                String prenom = tom.getString("prenom");
-                Log.i(LoginActivityMD.this.CAT,"promo:" + promo + " prenom:" + prenom);
-
-                Gson gson = new GsonBuilder()
-                        .serializeNulls()
-                        .disableHtmlEscaping()
-                        .setPrettyPrinting()
-                        .create();
-
-                String res2 = gson.toJson(ob);
-                Log.i(LoginActivityMD.this.CAT,"chaine recue:" + res);
-                Log.i(LoginActivityMD.this.CAT,"chaine avec gson:" + res2);
-
-                Promo unePromo = gson.fromJson(res,Promo.class);
-                Log.i(LoginActivityMD.this.CAT,unePromo.toString());
-
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return hash;
-        }
-
-        protected void onPostExecute(String hash) {
-            Log.i(LoginActivityMD.this.CAT,"onPostExecute");
-            Log.i(LoginActivityMD.this.CAT,hash);
-
-            if(!hash.isEmpty()) {
-                inputLogin.setErrorEnabled(false);
-                inputPasse.setErrorEnabled(false);
-                LoginActivityMD.this.alerter(hash);
-                Intent iVersChoixConv = new Intent(LoginActivityMD.this,ChoixConvActivityMD.class);
-                Bundle bdl = new Bundle();
-                bdl.putString("hash",hash);
-                iVersChoixConv.putExtras(bdl);
-                startActivity(iVersChoixConv);
-            } else {
-                inputLogin.setError("Erreur login ou mot de passe incorrect");
-                inputPasse.setError("Erreur login ou mot de passe incorrect");
-                LoginActivityMD.this.alerter("Erreur login ou mot de passe incorrect");
-            }
-
-        }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_m_d);
+    @AfterViews
+    void initialize() {
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sp.edit();
-        inputLogin = findViewById(R.id.textInputLayout);
-        inputPasse = findViewById(R.id.textInputLayout2);
-        edtLogin = findViewById(R.id.choixConvMD);
-        edtPasse = findViewById(R.id.mdpMD);
-        cbRemember = findViewById(R.id.checkBoxMD);
-        btnOK = findViewById(R.id.buttonOKMD);
-
-        btnOK.setOnClickListener(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // TODO: Au (re)chargement de l'activité,
-        // Lire les préférences partagées
         if (sp.getBoolean("remember",false)) {
             // et remplir (si nécessaire) les champs pseudo, passe, case à cocher
-            cbRemember.setChecked(true);
+            checkBoxMD.setChecked(true);
             edtLogin.setText(sp.getString("login",""));
             edtPasse.setText(sp.getString("passe",""));
         }
-
-        // Vérifier l'état du réseau
-        if (verifReseau()) {
-            btnOK.setEnabled(true); // activation du bouton
-        } else {
-            btnOK.setEnabled(false); // désactivation du bouton
-        }
     }
 
+    @Click
+    void buttonOKMD() {
+        alerter("click sur OK ANNOTATIONS");
+        if(verifReseau()) {
+            // Lors de l'appui sur le bouton OK
+            // si case est cochée, enregistrer les données dans les préférences
+            alerter("click sur OK");
+            if (checkBoxMD.isChecked()) {
+                editor.putBoolean("remember",true);
+                editor.putString("login", edtLogin.getText().toString());
+                editor.putString("passe", edtPasse.getText().toString());
+                editor.commit();
+            } else {
+                editor.clear();
+                editor.commit();
+            }
 
-    @Override
-    public void onClick(View v) {
-        // Lors de l'appui sur le bouton OK
-        // si case est cochée, enregistrer les données dans les préférences
-        alerter("click sur OK");
-        if (cbRemember.isChecked()) {
-            editor.putBoolean("remember",true);
-            editor.putString("login", edtLogin.getText().toString());
-            editor.putString("passe", edtPasse.getText().toString());
-            editor.commit();
-        } else {
-            editor.clear();
-            editor.commit();
+            // On envoie une requete HTTP
+            doInBackground(sp.getString("urlData","http://tomnab.fr/chat-api/")+"authenticate",
+                    "user=" + edtLogin.getText().toString()
+                            + "&password=" + edtPasse.getText().toString());
         }
-
-        // On envoie une requete HTTP
-        LoginActivityMD.JSONAsyncTask jsonT = new LoginActivityMD.JSONAsyncTask();
-        jsonT.execute(sp.getString("urlData","http://tomnab.fr/chat-api/")+"authenticate",
-                "user=" + edtLogin.getText().toString()
-                        + "&password=" + edtPasse.getText().toString());
 
     }
 
+    @Background
+    void doInBackground(String... qs) {
+        Log.i(CAT,"doInBackground");
+        Log.i(CAT,qs[0]);
+        Log.i(CAT,qs[1]);
+        String result = requete(qs[0], qs[1]);
+        Log.i(CAT,result);
+        String hash = "";
+        //String hash="4e28dafe87d65cca1482d21e76c61a06";
 
+        try {
+
+            JSONObject obR = new JSONObject(result);
+            hash = obR.getString("hash");
+
+            String res = "{\"promo\":\"2020-2021\",\"enseignants\":[{\"prenom\":\"Mohamed\",\"nom\":\"Boukadir\"},{\"prenom\":\"Thomas\",\"nom\":\"Bourdeaud'huy\"}]}";
+            JSONObject ob = new JSONObject(res);
+            String promo = ob.getString("promo");
+            JSONArray profs = ob.getJSONArray("enseignants");
+            JSONObject tom = profs.getJSONObject(1);
+            String prenom = tom.getString("prenom");
+            Log.i(CAT,"promo:" + promo + " prenom:" + prenom);
+
+            Gson gson = new GsonBuilder()
+                    .serializeNulls()
+                    .disableHtmlEscaping()
+                    .setPrettyPrinting()
+                    .create();
+
+            String res2 = gson.toJson(ob);
+            Log.i(CAT,"chaine recue:" + res);
+            Log.i(CAT,"chaine avec gson:" + res2);
+
+            Promo unePromo = gson.fromJson(res,Promo.class);
+            Log.i(CAT,unePromo.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        onPostExecute(hash);
+
+    }
+
+    @UiThread
+    void onPostExecute(String hash) {
+        Log.i(CAT,"onPostExecute");
+        Log.i(CAT,hash);
+
+        if(!hash.isEmpty()) {
+            textInputLayoutLogin.setErrorEnabled(false);
+            textInputLayoutPasse.setErrorEnabled(false);
+            Intent iVersChoixConv = new Intent(this,ChoixConvActivityMD_.class);
+            Bundle bdl = new Bundle();
+            bdl.putString("hash",hash);
+            iVersChoixConv.putExtras(bdl);
+            startActivity(iVersChoixConv);
+        } else {
+            textInputLayoutLogin.setError("Erreur login ou mot de passe incorrect");
+            textInputLayoutPasse.setError("Erreur login ou mot de passe incorrect");
+        }
+    }
 
     // Afficher les éléments du menu
     @Override
@@ -231,7 +201,7 @@ public class LoginActivityMD extends AppCompatActivity implements View.OnClickLi
         NetworkInfo netInfo = cnMngr.getActiveNetworkInfo();
 
         String sType = "Aucun réseau détecté";
-        Boolean bStatut = false;
+        boolean bStatut = false;
         if (netInfo != null)
         {
 
@@ -282,8 +252,6 @@ public class LoginActivityMD extends AppCompatActivity implements View.OnClickLi
                 String txtReponse = convertStreamToString(in);
                 urlConnection.disconnect();
                 return txtReponse;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -299,7 +267,7 @@ public class LoginActivityMD extends AppCompatActivity implements View.OnClickLi
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
+                sb.append(line).append("\n");
             }
             return sb.toString();
         }finally {

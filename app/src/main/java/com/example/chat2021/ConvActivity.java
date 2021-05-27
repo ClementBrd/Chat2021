@@ -1,5 +1,6 @@
 package com.example.chat2021;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,47 +8,38 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
-import com.google.android.material.navigation.NavigationBarItemView;
-import com.google.android.material.navigation.NavigationBarMenu;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.ArrayList;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ConvActivity extends AppCompatActivity implements View.OnClickListener {
+@EActivity(R.layout.activity_show_conversation)
+public class ConvActivity extends AppCompatActivity {
 
     private static final String CAT = "LE4-SI";
-    RecyclerView conversation;
-    TextInputLayout edtContenu;
-    Button btnOK;
-
     APIInterface apiService;
     String hash;
     ListMessage lm;
     int convID;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_conversation);
+    @ViewById(R.id.conversation_svMessages)
+    RecyclerView conversation_svMessages;
+    
+    @ViewById(R.id.conversation_edtMessage)
+    TextInputLayout conversation_edtMessage;
+
+    @AfterViews
+    void initialize() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
-
-        conversation = findViewById(R.id.conversation_svMessages);
-        edtContenu = findViewById(R.id.conversation_edtMessage);
-        btnOK = findViewById(R.id.conversation_btnOK);
-
-        btnOK.setOnClickListener(this);
 
         Bundle bdl = this.getIntent().getExtras();
         hash = bdl.getString("hash");
@@ -57,42 +49,54 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         Call<ListMessage> call1 = apiService.doGetListMessage(hash, convID);
         call1.enqueue(new Callback<ListMessage>() {
             @Override
-            public void onResponse(Call<ListMessage> call, Response<ListMessage> response) {
+            public void onResponse(@NonNull Call<ListMessage> call, @NonNull Response<ListMessage> response) {
                 lm = response.body();
                 MessageAdapter adapter = new MessageAdapter(lm.messages);
-                conversation.setAdapter(adapter);
-                conversation.setLayoutManager(new LinearLayoutManager(ConvActivity.this));
+                conversation_svMessages.setAdapter(adapter);
+                conversation_svMessages.setLayoutManager(new LinearLayoutManager(ConvActivity.this));
                 Log.i(CAT,lm.messages.toString());
             }
 
             @Override
-            public void onFailure(Call<ListMessage> call, Throwable t) {
+            public void onFailure(@NonNull Call<ListMessage> call, @NonNull Throwable t) {
                 call.cancel();
             }
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        String contenu = edtContenu.getEditText().getText().toString();
-        if(contenu.length() > 0){
-            apiService = APIClient.getClient().create(APIInterface.class);
-            Call<Message> call1 = apiService.doSetListMessage(hash, convID, contenu);
-            call1.enqueue(new Callback<Message>() {
-                @Override
-                public void onResponse(Call<Message> call, Response<Message> response) {
-                    Message newMessage = new Message(Integer.toString(lm.messages.size() + 1), contenu, "Clémi", "rouge");
-                    lm.messages.add(newMessage);
-                    edtContenu.getEditText().getText().clear();
-                    Log.i(CAT,response.body().toString());
-                }
-
-                @Override
-                public void onFailure(Call<Message> call, Throwable t) {
-                    call.cancel();
-                }
-            });
+    @Click
+    void conversation_btnOK() {
+        if(conversation_edtMessage.getEditText() != null) {
+            String contenu = conversation_edtMessage.getEditText().getText().toString();
+            if(contenu.length() > 0) {
+                apiService = APIClient.getClient().create(APIInterface.class);
+                Call<Message> call1 = apiService.doSetListMessage(hash, convID, contenu);
+                doInBackground(call1, contenu);
+            }
         }
+    }
 
+    @Background
+    void doInBackground(Call<Message> call1, String contenu) {
+        call1.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
+                Message newMessage = new Message(Integer.toString(lm.messages.size() + 1), contenu, "tom", "rouge");
+                onPostExecute(newMessage);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
+                call.cancel();
+            }
+        });
+    }
+
+    @UiThread
+    void onPostExecute(Message newMessage) {
+        lm.messages.add(newMessage);
+        if(conversation_edtMessage.getEditText() != null)
+            conversation_edtMessage.getEditText().getText().clear();
+        Log.i(CAT,newMessage.toString());
     }
 }
